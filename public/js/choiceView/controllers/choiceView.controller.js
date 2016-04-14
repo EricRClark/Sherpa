@@ -5,6 +5,7 @@ angular
       var vm = this;
       vm.categoryChoice = [];
       vm.choiceLocations = [];
+      vm.locations;
       // vm.categoryChoiceID = [];
 
       // getting all of the tour categories from the data to allow the user to build custom tour
@@ -37,29 +38,30 @@ angular
         vm.categoryChoice.forEach(function(el){
           return id.push(el.id)
         })
-
+        console.log("IDS", id);
         // clean ids to remove duplicates
-        var cleanId = _.uniqBy(id);
+        // var cleanId = _.uniqBy(id);
 
         // pass the cleanId param into the getAllCategoryLocs function (found in the choiceViewService) then we return the data associated with that id via 'category/{id}' route.
-        choiceViewService.getAllCategoryLocs(cleanId)
+        choiceViewService.getAllCategoryLocs(id)
           .then(function(data){
-            vm.locations = data.data;
-            console.log("location data", data)
-            window.glob = data
+            $rootScope.locations = data;
+            console.log("location data", $rootScope.locations)
+            window.glob = data;
+            // vm.addChoicesToView();
           })
 
           // change views from choiceView to choiceViewSlider
-          $state.go('home.choiceViewSlider')
+          $state.go('home.choiceViewSlider');
+
       }
 
-      // iterate over the returned data to
-      vm.addChoicesToView = function(){
-        vm.categoryChoice.forEach(function(el){
-          return vm.choiceLocations.push(el.id)
-        })
-      }
-
+      // // iterate over the returned data
+      // vm.addChoicesToView = function(){
+      //   vm.categoryChoice.forEach(function(el){
+      //     return vm.choiceLocations.push(el.id)
+      //   })
+      // }
 
     }
 )
