@@ -79,7 +79,7 @@ public class SherpaController {
         if (list != null) {
             return new ResponseEntity<Object>(list, HttpStatus.TEMPORARY_REDIRECT);
         }
-        else return new ResponseEntity<Object>("No existing tour", HttpStatus.CONTINUE);
+        else return new ResponseEntity<Object>(HttpStatus.GONE);
     }
 
     /*Hit to get the perm tour options, they will include each
@@ -147,7 +147,7 @@ public class SherpaController {
         tourLocRepo.save(tlj);
         return new ResponseEntity<Object>(HttpStatus.OK);
     }
-    @RequestMapping(path = "/location", method = RequestMethod.GET)
+    @RequestMapping(path = "/tour/locations", method = RequestMethod.GET)
     public ResponseEntity<Object> getLocJoins(HttpSession session) {
         int id = (Integer) session.getAttribute("tourId");
         return new ResponseEntity<Object>(tourLocRepo.findAllByTour(tourRepo.findOne(id)), HttpStatus.OK);
@@ -190,6 +190,7 @@ public class SherpaController {
         while (fileScanner.hasNext()) {
             String[] columns = fileScanner.nextLine().split("\\t");
             Location location = new Location(columns[3], columns[4], Double.valueOf(columns[5]), Double.valueOf(columns[6]));
+
             if (!columns[0].isEmpty()) {
                 location.setImageUrl(columns[0]);
             }
@@ -214,15 +215,14 @@ public class SherpaController {
         File f = new File(fileName);
         Scanner fileScanner = new Scanner(f);
         fileScanner.nextLine();
-        for (int i = 0; i < 3; i++) {
-            PermTour permTour = new PermTour();
-            permTour.setName(String.format("tour%d", i+1));
-            permTour = pTourRepo.save(permTour);
-        }
         while (fileScanner.hasNext()) {
             String[] columns = fileScanner.nextLine().split("\\t");
-            PermTourLocationJoin tlj = new PermTourLocationJoin(locRepo.findOne(Integer.valueOf(columns[1])), pTourRepo.findOne(Integer.valueOf(columns[0])));
-            pTourLocRepo.save(tlj);
+            PermTour tour = new PermTour(columns[0], columns[2], columns[3]);
+            tour = pTourRepo.save(tour);
+            String[] locs = columns[1].split(",");
+            for (String loc : locs) {
+                pTourLocRepo.save(new PermTourLocationJoin(locRepo.findOne(Integer.valueOf(loc)), tour));
+            }
         }
     }
 }

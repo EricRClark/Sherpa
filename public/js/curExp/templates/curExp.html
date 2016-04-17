@@ -1,16 +1,22 @@
-
-  <h1>Curated Experience</h1>
-<!-- ng-repeat call directive and pass in tourobj -->
-<!-- <div class="curExp-container col-md-12"> -->
-
-<div ng-repeat="tour in ExpCtrl.tours" >
-  <experience-directive submit = "ExpCtrl.sendTour(tour.id)" exp-tour="tour"></experience-directive>
-
+<div class="container header-container">
+  <div class="logo col-sm-6 col-xs-12">
+    <h1>sherpa</h1>
+    <a ui-sref="landing">
+      <i class="fa fa-long-arrow-left" aria-hidden="true"></i>  start over
+    </a>
+    <hr>
+  </div>
+  <div class="description col-sm-6 col-xs-12">
+    <p>some kind of message</p>
+  </div>
 </div>
-<!-- </div> -->
 
-
-
+<div class="container">
+<!-- ng-repeat call directive and pass in tourobj -->
+  <div ng-repeat="tour in ExpCtrl.tours" >
+    <experience-directive submit = "ExpCtrl.sendTour(tour.id)" exp-tour="tour"></experience-directive>
+  </div>
+</div>
 
 <footer>
 <div class="nav col-xs-12">
