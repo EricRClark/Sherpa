@@ -76,8 +76,8 @@ public class SherpaController {
     public ResponseEntity<Object> getTourLocs(HttpSession session, @PathVariable("id") int id) {
         session.setAttribute("tourId", id);
         List<TourLocationJoin> list = tourLocRepo.findAllByTour(tourRepo.findOne(id));
-        if (list != null) {
-            return new ResponseEntity<Object>(list, HttpStatus.TEMPORARY_REDIRECT);
+        if (list.size() > 0) {
+            return new ResponseEntity<Object>(list, HttpStatus.ACCEPTED);
         }
         else return new ResponseEntity<Object>(HttpStatus.GONE);
     }
@@ -175,13 +175,12 @@ public class SherpaController {
         Scanner fileScanner = new Scanner(f);
         fileScanner.nextLine();
         while (fileScanner.hasNext()) {
-            String[] columns = fileScanner.nextLine().split("\\t");
-            for (String cat : columns) {
-                Category category = new Category(cat);
-                catRepo.save(category);
-            }
+            String row = fileScanner.nextLine();
+            Category category = new Category(row);
+            catRepo.save(category);
         }
     }
+
 
     public void populateLocationsTable(String fileName) throws FileNotFoundException {
         File f = new File(fileName);
