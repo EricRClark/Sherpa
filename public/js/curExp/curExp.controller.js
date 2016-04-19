@@ -19,5 +19,3 @@ angular
           });
         }
     });
-
-//Updated tourID confirmation to send to Alex??
