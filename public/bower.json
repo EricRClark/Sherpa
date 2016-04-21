@@ -24,5 +24,8 @@
     "angular-touch": "^1.5.3",
     "ngSticky": "^1.8.10",
     "animate.css": "^3.5.1"
+  },
+  "resolutions": {
+    "angular": "1.5.3"
   }
 }
